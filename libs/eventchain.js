@@ -1,7 +1,8 @@
 var Event = require('events').EventEmitter;
+var event = new Event();
+
 var Eventchain = function (name) {
   this.name = name;
-  this.event = new Event();
   this.count = 0;
   this.current = 0;
  };  
@@ -11,7 +12,7 @@ var Eventchain = function (name) {
  * eg: function(record, next) {...};
  */
 Eventchain.prototype.add = function (callback) {
-  this.event.on(this.eventName(), callback);
+  event.on(this.eventName(), callback);
   this.count++;
 };
 
@@ -24,17 +25,26 @@ Eventchain.prototype.emit = function (args, callback) {
   var self = this;
   if (this.count == 0 || this.current >= this.count) { 
     this.current = 0; 
-    return callback(); 
+    if (callback) { callback(); }
+    return;
   }
   
-  this.event.emit(this.eventName(this.current), args, function (e) {
-    if (e) {
-      callback(e);
-    } else {
-      self.current++;
-      self.emit(args, callback);
-    }
-  });
+  // async
+  if (callback) {
+    event.emit(this.eventName(this.current), args, function (e) {
+      if (e) {
+        callback(e);
+      } else {
+        self.current++;
+        self.emit(args, callback);
+      }
+    });
+  } else { // sync
+    event.emit(this.eventName(this.current), args);
+    self.current++;
+    self.emit(args);
+  }
+  
 };
 
 module.exports = exports = Eventchain;

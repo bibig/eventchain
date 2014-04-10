@@ -1,5 +1,5 @@
 var Eventchain = require('../index');
-var ec = Eventchain.create('basic test');
+var ec = Eventchain.create('basic event');
 
 ec.add(function (string, next) {
   var id = 1;
@@ -44,12 +44,12 @@ ec.add(function (string, next) {
 
 ec.emit('hello world', function (e) {
   if (e) { throw e;}
-  // console.log('all done!');
   console.log('new round will begin!');
   ec.emit('hello eventchain', function (e) {
-    if (e) { throw e;}
-    console.log('all done!');
+    if (e) { 
+      console.error(e); 
+    } else {
+      console.log('all done!');
+    }
   });
 });
-
-
