@@ -17,6 +17,16 @@ ec.add(function (string, next) {
   }, 1000);
 });
 
+
+/*
+ec.add(function (string, next) {
+  var id = 2.5;
+  setTimeout(function () {
+    next(new Error('im tired!'));
+  }, 1000);
+});
+*/
+
 ec.add(function (string, next) {
   var id = 3;
   setTimeout(function () {
@@ -33,17 +43,14 @@ ec.add(function (string, next) {
   }, 1000);
 });
 
-/*
-ec.add(function (string, next) {
-  var id = 3;
-  setTimeout(function () {
-    next(new Error('im tired!'));
-  }, 1000);
-});
-*/
+
 
 ec.emit('hello world', function (e) {
-  if (e) { throw e;}
+  if (e) { 
+    console.error(e);
+    return;
+  }
+  
   console.log('new round will begin!');
   ec.emit('hello eventchain', function (e) {
     if (e) { 
