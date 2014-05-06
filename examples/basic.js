@@ -51,12 +51,16 @@ ec.emit('hello world', function (e) {
     return;
   }
   
-  console.log('new round will begin!');
+  console.log('over, and a new round will begin!');
   ec.emit('hello eventchain', function (e) {
     if (e) { 
       console.error(e); 
     } else {
-      console.log('all done!');
+      console.log('new round over!');
+
+      ec.clear(); // if clear(),  all events in chain will be removed, and the eventchain cannot fire again.
+      
+      ec.emit('will not run');
     }
   });
 });

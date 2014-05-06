@@ -1,7 +1,7 @@
 {
   "name": "eventchain",
   "author": "Bibig <bibig@me.com> (https://twitter.com/bibig)",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Calling the callbacks on same event one after one",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,5 @@
     "type": "git",
     "url": "https://github.com/bibig/node-eventchain.git"
   },
-  "author": "bibig@me.com",
   "license": "BSD-2-Clause"
 }

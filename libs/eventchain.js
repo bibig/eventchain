@@ -24,10 +24,8 @@ function randomName (len) {
  * eg: function(record, next) {...};
  */
 Eventchain.prototype.add = function (callback) {
-  // console.log('ready to add: %s', this.eventName());
   event.on(this.eventName(), callback);
   this.count++;
-  // console.log('add an event, total: %d', this.count);
 };
 
 Eventchain.prototype.eventName = function (count) {
@@ -37,24 +35,23 @@ Eventchain.prototype.eventName = function (count) {
 
 Eventchain.prototype.clear = function () {
   for (var i = 0; i < this.count; i++) {
-    // console.log('ready to remove: %s', this.eventName(i));
     event.removeAllListeners(this.eventName(i));
   }
-}
+};
 
 Eventchain.prototype.clearOnce = function () {
   if (this.isOnce) {
     this.clear();
   }
-}
+};
 
 Eventchain.prototype.isDone = function () {
   return this.current >= this.count;
-}
+};
 
 Eventchain.prototype.reset = function () {
   this.current = 0;
-}
+};
 
 Eventchain.prototype.emit = function (args, callback) {
   var self = this;
@@ -65,32 +62,21 @@ Eventchain.prototype.emit = function (args, callback) {
     return;
   }
   
-  if (this.count == 0 || this.isDone()) { 
+  if (this.count === 0 || this.isDone()) { 
     this.reset();
     this.clearOnce();
     callback(null, args);
     return;
   }
   
-  /*
-  next = function (e) {
-    if (e) {
-      self.clearOnce();
-      callback(e);
-    } else {
-      self.current++;
-      self.emit(args, callback);
-    }
-  };
-  */
-  
   next = function (e) {
     var nextArgs = [];
+
     if (e) {
       self.clearOnce();
       callback(e);
     } else {
-      if (arguments.length == 1) {
+      if (arguments.length <= 1) {
         nextArgs = args;
       } else if (arguments.length == 2) {
         nextArgs = arguments[1];
@@ -111,7 +97,7 @@ Eventchain.prototype.emit = function (args, callback) {
 
 Eventchain.prototype.emitSync = function (args) {
   
-  if (this.count == 0 || this.isDone()) { 
+  if (this.count === 0 || this.isDone()) { 
     this.reset();
     return;
   }
